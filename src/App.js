@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { Toaster } from "react-hot-toast";
+import LoginPage from './view/Auth/logIn';
+import SignUpPage from './view/Auth/signUp';
+import Dashboard from './view/Dashboard';
+import store from './redux/store';
+import Layout from './Components/Layout/lindex';
+import MealList from './view/List';
+import ErrorBoundary from './Components/ErrorBoundary';
+import { AuthProvider } from './utils/AuthContext';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ErrorBoundary>
+        <AuthProvider>
+          <Provider store={store}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<LoginPage />} />
+                <Route path="/Sign-up" element={<SignUpPage />} />
+                <Route path="/dashboard" element={<Layout element={<Dashboard />} />} />
+                <Route path="/mealList" element={<Layout element={<MealList />} />} />
+              </Routes>
+            </BrowserRouter>
+          </Provider>
+          <Toaster position="top-right" />
+        </AuthProvider>
+      </ErrorBoundary>
     </div>
   );
 }
